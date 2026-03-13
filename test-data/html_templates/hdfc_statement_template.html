@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDFC Bank Statement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #dc143c;
+            padding-bottom: 10px;
+        }
+        
+        .bank-logo {
+            color: #dc143c;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .statement-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .account-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .account-left, .account-right {
+            width: 48%;
+        }
+        
+        .info-row {
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 140px;
+        }
+        
+        .statement-period {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            background-color: #dc143c;
+            color: white;
+            padding: 8px;
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .summary-table th,
+        .summary-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+        }
+        
+        .summary-table th {
+            background-color: #dc143c;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 10px;
+        }
+        
+        .transaction-table th,
+        .transaction-table td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: left;
+        }
+        
+        .transaction-table th {
+            background-color: #dc143c;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .amount {
+            text-align: right !important;
+        }
+        
+        .credit {
+            color: #006400;
+        }
+        
+        .debit {
+            color: #8b0000;
+        }
+        
+        .balance {
+            text-align: right !important;
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="bank-logo">HDFC BANK</div>
+        <div>India's Leading Private Sector Bank</div>
+        <div class="statement-title">SAVINGS ACCOUNT STATEMENT</div>
+    </div>
+
+    <div class="account-info">
+        <div class="account-left">
+            <div class="info-row">
+                <span class="info-label">Account Holder:</span> {{account_holder_name}}
+            </div>
+            <div class="info-row">
+                <span class="info-label">Account Number:</span> {{account_number}}
+            </div>
+            <div class="info-row">
+                <span class="info-label">Account Type:</span> {{account_type}}
+            </div>
+            <div class="info-row">
+                <span class="info-label">IFSC Code:</span> {{ifsc_code}}
+            </div>
+        </div>
+        <div class="account-right">
+            <div class="info-row">
+                <span class="info-label">Branch:</span> {{branch_name}}
+            </div>
+            <div class="info-row">
+                <span class="info-label">Address:</span> {{branch_address}}
+            </div>
+            <div class="info-row">
+                <span class="info-label">Statement Date:</span> {{statement_date}}
+            </div>
+            <div class="info-row">
+                <span class="info-label">CIF Number:</span> {{cif_number}}
+            </div>
+        </div>
+    </div>
+
+    <div class="statement-period">
+        Statement Period: {{start_date}} to {{end_date}}
+    </div>
+
+    <table class="summary-table">
+        <thead>
+            <tr>
+                <th>Opening Balance</th>
+                <th>Total Credits</th>
+                <th>Total Debits</th>
+                <th>Closing Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>₹ {{opening_balance}}</td>
+                <td>₹ {{total_credits}}</td>
+                <td>₹ {{total_debits}}</td>
+                <td>₹ {{closing_balance}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="transaction-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Value Date</th>
+                <th>Description</th>
+                <th>Ref No./Cheque No.</th>
+                <th>Debit</th>
+                <th>Credit</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{transaction.date}}</td>
+                <td>{{transaction.date}}</td>
+                <td>{{transaction.description}}</td>
+                <td>{{transaction.reference_number}}</td>
+                <td class="amount debit">
+                    {% if not transaction.is_credit %}₹ {{transaction.amount}}{% endif %}
+                </td>
+                <td class="amount credit">
+                    {% if transaction.is_credit %}₹ {{transaction.amount}}{% endif %}
+                </td>
+                <td class="balance">₹ {{transaction.balance}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p><strong>IMPORTANT NOTES:</strong></p>
+        <p>• This is a computer generated statement and does not require signature.</p>
+        <p>• For any discrepancy, please contact your home branch within 30 days from the statement date.</p>
+        <p>• Interest is calculated on daily basis and credited quarterly.</p>
+        <p>• Please verify your entries and report any unauthorized transaction immediately.</p>
+        <br>
+        <p>HDFC Bank Limited | Customer Care: 1800-266-4332 | www.hdfcbank.com</p>
+        <p>Statement generated on: {{generation_date}} | Page 1 of 1</p>
+    </div>
+</body>
+</html>

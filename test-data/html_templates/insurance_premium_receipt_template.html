@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Premium Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .company-logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .document-title {
+            font-size: 18px;
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .receipt-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 25px 0;
+            background-color: #f8fafc;
+            padding: 20px;
+            border-left: 5px solid #2563eb;
+        }
+        
+        .info-section h4 {
+            color: #2563eb;
+            margin: 0 0 15px 0;
+            border-bottom: 1px solid #2563eb;
+            padding-bottom: 5px;
+        }
+        
+        .info-item {
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            width: 140px;
+            display: inline-block;
+        }
+        
+        .premium-details {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .premium-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .premium-table th,
+        .premium-table td {
+            padding: 12px;
+            border: 1px solid #10b981;
+            text-align: left;
+        }
+        
+        .premium-table th {
+            background-color: #10b981;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .amount-col {
+            text-align: right !important;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px;
+            background-color: #1f2937;
+            color: white;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="company-logo">{{insurance_company}}</div>
+        <div>Insurance is the subject matter of solicitation</div>
+        <div class="document-title">PREMIUM PAYMENT RECEIPT</div>
+    </div>
+
+    <div class="receipt-info">
+        <div class="info-section">
+            <h4>Policy Information</h4>
+            <div class="info-item">
+                <span class="info-label">Policy Number:</span> {{policy_number}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Policy Type:</span> {{policy_type}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Policy Holder:</span> {{policy_holder_name}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Life Assured:</span> {{life_assured_name}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Sum Assured:</span> ₹ {{sum_assured}}
+            </div>
+        </div>
+        <div class="info-section">
+            <h4>Payment Details</h4>
+            <div class="info-item">
+                <span class="info-label">Receipt Number:</span> {{receipt_number}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Payment Date:</span> {{payment_date}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Due Date:</span> {{due_date}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Payment Mode:</span> {{payment_mode}}
+            </div>
+            <div class="info-item">
+                <span class="info-label">Premium Term:</span> {{premium_term}}
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-details">
+        <h3 style="text-align: center; color: #065f46; margin-top: 0;">Premium Breakdown</h3>
+        <table class="premium-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Basic Premium</td>
+                    <td class="amount-col">{{basic_premium}}</td>
+                </tr>
+                <tr>
+                    <td>Service Tax</td>
+                    <td class="amount-col">{{service_tax}}</td>
+                </tr>
+                <tr>
+                    <td>Total Premium Paid</td>
+                    <td class="amount-col"><strong>{{total_premium}}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <div style="font-size: 16px; font-weight: bold; margin-bottom: 10px;">{{insurance_company}}</div>
+        <div style="font-size: 10px;">
+            Customer Care: {{customer_care}} | Website: {{website}}<br>
+            {{registered_office}}
+        </div>
+    </div>
+</body>
+</html>

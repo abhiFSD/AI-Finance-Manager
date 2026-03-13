@@ -1,0 +1,34 @@
+# Lightweight Docker Compose for development
+# Only runs essential services in Docker, frontend/backend run locally
+
+services:
+  # Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: finance-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: financeapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - finance-app
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: finance-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - finance-app
+
+networks:
+  finance-app:
+    driver: bridge
+
+volumes:
+  postgres_data:

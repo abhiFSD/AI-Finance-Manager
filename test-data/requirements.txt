@@ -1,0 +1,39 @@
+# Finance Test Data Generator Dependencies
+
+# Core dependencies
+jinja2>=3.1.0           # Template rendering for HTML documents
+
+# Optional dependencies (for PDF generation)
+# Note: pdfkit requires wkhtmltopdf system dependency
+# pdfkit>=1.0.0          # PDF generation from HTML (optional)
+
+# Data processing
+python-dateutil>=2.8.0 # Date manipulation and parsing
+
+# For development and testing
+# pytest>=7.0.0          # Unit testing framework (optional)
+
+# Installation Instructions:
+# 
+# 1. Install Python dependencies:
+#    pip install jinja2 python-dateutil
+#    
+#    or
+#    
+#    pip install -r requirements.txt
+#
+# 2. For PDF generation (optional):
+#    pip install pdfkit
+#    
+#    Then install wkhtmltopdf system dependency:
+#    
+#    macOS (with Homebrew):
+#    brew install wkhtmltopdf
+#    
+#    Ubuntu/Debian:
+#    sudo apt-get install wkhtmltopdf
+#    
+#    Windows:
+#    Download from: https://wkhtmltopdf.org/downloads.html
+#
+# Note: The generators work without PDF dependencies and will create HTML files instead.

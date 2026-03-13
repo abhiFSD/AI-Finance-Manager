@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Statement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .bank-info {
+            flex: 1;
+        }
+        
+        .bank-logo {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .bank-tagline {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .loan-type {
+            text-align: right;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        
+        .loan-type h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        
+        .document-title {
+            text-align: center;
+            font-size: 22px;
+            color: #1f2937;
+            font-weight: bold;
+            margin: 20px 0;
+            background-color: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #1f2937;
+        }
+        
+        .borrower-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 25px 0;
+            background-color: #f9fafb;
+            padding: 25px;
+            border-left: 5px solid #1f2937;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .detail-section h4 {
+            color: #1f2937;
+            margin: 0 0 15px 0;
+            font-size: 15px;
+            border-bottom: 2px solid #1f2937;
+            padding-bottom: 8px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            width: 150px;
+            color: #4b5563;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #374151;
+        }
+        
+        .loan-number {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #1f2937;
+            background-color: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .loan-summary {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .loan-summary h3 {
+            color: #92400e;
+            margin: 0 0 20px 0;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #f59e0b;
+        }
+        
+        .summary-card h4 {
+            margin: 0 0 8px 0;
+            color: #92400e;
+            font-size: 12px;
+        }
+        
+        .summary-card .value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .payment-schedule {
+            margin: 30px 0;
+        }
+        
+        .payment-header {
+            background-color: #1f2937;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        
+        .next-payment {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #dc2626;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .next-payment h4 {
+            color: #991b1b;
+            margin: 0 0 15px 0;
+            font-size: 14px;
+        }
+        
+        .payment-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .payment-item {
+            text-align: center;
+        }
+        
+        .payment-item h5 {
+            margin: 0 0 5px 0;
+            color: #991b1b;
+            font-size: 11px;
+        }
+        
+        .payment-item .value {
+            font-weight: bold;
+            font-size: 14px;
+            color: #1f2937;
+        }
+        
+        .transaction-section {
+            margin-top: 30px;
+        }
+        
+        .transaction-header {
+            background-color: #1f2937;
+            color: white;
+            padding: 12px 20px;
+            font-weight: bold;
+            font-size: 13px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .transaction-table th {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-weight: bold;
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #1f2937;
+        }
+        
+        .transaction-table td {
+            padding: 10px 8px;
+            border: 1px solid #d1d5db;
+            text-align: left;
+        }
+        
+        .transaction-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .transaction-table tr:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .amount-col {
+            text-align: right !important;
+            font-weight: bold;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .balance-col {
+            text-align: right !important;
+            font-weight: bold;
+            background-color: #e5e7eb !important;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .payment-made {
+            color: #059669;
+            background-color: #ecfdf5 !important;
+        }
+        
+        .payment-due {
+            color: #dc2626;
+            background-color: #fef2f2 !important;
+        }
+        
+        .amortization-section {
+            margin: 40px 0;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #0284c7;
+            border-radius: 10px;
+            padding: 25px;
+        }
+        
+        .amortization-section h3 {
+            color: #0c4a6e;
+            margin: 0 0 20px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .amortization-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+        
+        .amortization-table th,
+        .amortization-table td {
+            padding: 8px;
+            border: 1px solid #0284c7;
+            text-align: right;
+        }
+        
+        .amortization-table th {
+            background-color: #0284c7;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .amortization-table tr:nth-child(even) {
+            background-color: #f0f9ff;
+        }
+        
+        .disclaimer {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #fef2f2;
+            border-left: 5px solid #ef4444;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .disclaimer h4 {
+            color: #b91c1c;
+            margin-top: 0;
+        }
+        
+        .disclaimer ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        .disclaimer li {
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .footer .bank-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        
+        .contact-info {
+            font-size: 10px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="bank-info">
+            <div class="bank-logo">{{bank_name}}</div>
+            <div class="bank-tagline">{{bank_tagline}}</div>
+        </div>
+        <div class="loan-type">
+            <h3>{{loan_type}}</h3>
+            <div>Loan Statement</div>
+        </div>
+    </div>
+
+    <div class="document-title">
+        LOAN ACCOUNT STATEMENT
+    </div>
+
+    <div class="borrower-details">
+        <div class="detail-section">
+            <h4>Borrower Information</h4>
+            <div class="detail-row">
+                <span class="detail-label">Borrower Name:</span>
+                <span class="detail-value">{{borrower_name}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Co-Borrower:</span>
+                <span class="detail-value">{{co_borrower_name}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Loan Account No:</span>
+                <span class="detail-value loan-number">{{loan_account_number}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Customer ID:</span>
+                <span class="detail-value">{{customer_id}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Mobile Number:</span>
+                <span class="detail-value">{{mobile_number}}</span>
+            </div>
+        </div>
+        <div class="detail-section">
+            <h4>Loan Details</h4>
+            <div class="detail-row">
+                <span class="detail-label">Branch Name:</span>
+                <span class="detail-value">{{branch_name}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Loan Sanction Date:</span>
+                <span class="detail-value">{{sanction_date}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Interest Rate:</span>
+                <span class="detail-value">{{interest_rate}}% p.a.</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Tenure:</span>
+                <span class="detail-value">{{tenure_years}} years ({{tenure_months}} months)</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Statement Period:</span>
+                <span class="detail-value">{{start_date}} to {{end_date}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="loan-summary">
+        <h3>Loan Summary</h3>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h4>Original Loan Amount</h4>
+                <div class="value">₹ {{original_loan_amount}}</div>
+            </div>
+            <div class="summary-card">
+                <h4>Outstanding Principal</h4>
+                <div class="value">₹ {{outstanding_principal}}</div>
+            </div>
+            <div class="summary-card">
+                <h4>EMI Amount</h4>
+                <div class="value">₹ {{emi_amount}}</div>
+            </div>
+            <div class="summary-card">
+                <h4>Total Interest Paid</h4>
+                <div class="value">₹ {{total_interest_paid}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="next-payment">
+        <h4>Next Payment Due</h4>
+        <div class="payment-details">
+            <div class="payment-item">
+                <h5>Due Date</h5>
+                <div class="value">{{next_due_date}}</div>
+            </div>
+            <div class="payment-item">
+                <h5>Principal Amount</h5>
+                <div class="value">₹ {{next_principal_amount}}</div>
+            </div>
+            <div class="payment-item">
+                <h5>Interest Amount</h5>
+                <div class="value">₹ {{next_interest_amount}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="transaction-section">
+        <div class="transaction-header">
+            PAYMENT HISTORY
+        </div>
+
+        <table class="transaction-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">Payment Date</th>
+                    <th style="width: 10%;">Due Date</th>
+                    <th style="width: 12%;">Principal (₹)</th>
+                    <th style="width: 12%;">Interest (₹)</th>
+                    <th style="width: 12%;">Total Payment (₹)</th>
+                    <th style="width: 10%;">Late Fee (₹)</th>
+                    <th style="width: 15%;">Outstanding Balance (₹)</th>
+                    <th style="width: 8%;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payment_history %}
+                <tr class="{{payment.status_class}}">
+                    <td>{{payment.payment_date}}</td>
+                    <td>{{payment.due_date}}</td>
+                    <td class="amount-col">{{payment.principal_amount}}</td>
+                    <td class="amount-col">{{payment.interest_amount}}</td>
+                    <td class="amount-col">{{payment.total_payment}}</td>
+                    <td class="amount-col">{{payment.late_fee}}</td>
+                    <td class="balance-col">{{payment.outstanding_balance}}</td>
+                    <td style="text-align: center;">{{payment.status}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="amortization-section">
+        <h3>Upcoming EMI Schedule (Next 6 Months)</h3>
+        <table class="amortization-table">
+            <thead>
+                <tr>
+                    <th>EMI No.</th>
+                    <th>Due Date</th>
+                    <th>Principal (₹)</th>
+                    <th>Interest (₹)</th>
+                    <th>EMI Amount (₹)</th>
+                    <th>Balance (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for schedule in upcoming_schedule %}
+                <tr>
+                    <td style="text-align: center;">{{schedule.emi_number}}</td>
+                    <td style="text-align: center;">{{schedule.due_date}}</td>
+                    <td>{{schedule.principal}}</td>
+                    <td>{{schedule.interest}}</td>
+                    <td>{{schedule.emi_amount}}</td>
+                    <td>{{schedule.balance}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="disclaimer">
+        <h4>Important Terms & Information</h4>
+        <ul>
+            <li><strong>Payment Due Date:</strong> EMI is due on the {{emi_due_date}} of every month. Late payment charges apply for delays.</li>
+            <li><strong>Prepayment:</strong> Partial or full prepayment is allowed with {{prepayment_charges}} prepayment charges.</li>
+            <li><strong>Interest Calculation:</strong> Interest is calculated on reducing balance method on daily basis.</li>
+            <li><strong>Default:</strong> Non-payment beyond {{default_period}} days may result in loan default and legal action.</li>
+            <li><strong>Auto-Debit:</strong> EMI is auto-debited from your account ending {{auto_debit_account}} on the due date.</li>
+            <li><strong>Credit Bureau:</strong> Payment history is reported to credit bureaus (CIBIL/Equifax/Experian/CRIF).</li>
+            <li><strong>Contact:</strong> For any queries or payment issues, contact {{customer_care}} immediately.</li>
+            <li><strong>Statement Accuracy:</strong> Please verify all details and report discrepancies within 15 days.</li>
+            <li>This statement is computer generated and does not require signature.</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <div class="bank-name">{{bank_name}}</div>
+        <div class="contact-info">
+            Customer Care: {{customer_care}} | Loan Helpline: {{loan_helpline}}<br>
+            Website: {{website}} | Email: {{support_email}}<br>
+            {{registered_office}}<br>
+            Statement Date: {{statement_date}} | Generated: {{generation_date}}
+        </div>
+    </div>
+</body>
+</html>

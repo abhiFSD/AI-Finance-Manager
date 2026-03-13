@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutual Fund Statement</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #1e40af 0%, #059669 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .amc-logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .amc-subtitle {
+            font-size: 16px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .document-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .statement-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 25px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e0;
+        }
+        
+        .info-section h4 {
+            color: #1e40af;
+            margin: 0 0 15px 0;
+            font-size: 15px;
+            border-bottom: 2px solid #1e40af;
+            padding-bottom: 6px;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            width: 140px;
+            color: #4a5568;
+        }
+        
+        .info-value {
+            flex: 1;
+            color: #2d3748;
+        }
+        
+        .folio-highlight {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #1e40af;
+            background-color: #dbeafe;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .schemes-section {
+            margin: 30px 0;
+        }
+        
+        .scheme-card {
+            background: white;
+            border: 2px solid #1e40af;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .scheme-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 20px;
+        }
+        
+        .scheme-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .scheme-details {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .scheme-summary {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+        
+        .summary-item {
+            text-align: center;
+            padding: 15px 10px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .summary-item h5 {
+            margin: 0 0 8px 0;
+            color: #4a5568;
+            font-size: 11px;
+        }
+        
+        .summary-item .value {
+            font-weight: bold;
+            font-size: 14px;
+            color: #2d3748;
+        }
+        
+        .gain-positive {
+            color: #059669 !important;
+        }
+        
+        .gain-negative {
+            color: #dc2626 !important;
+        }
+        
+        .transaction-section {
+            margin-top: 25px;
+        }
+        
+        .transaction-header {
+            background-color: #1e40af;
+            color: white;
+            padding: 12px 20px;
+            font-weight: bold;
+            font-size: 13px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            background: white;
+        }
+        
+        .transaction-table th {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: #1e40af;
+            font-weight: bold;
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #1e40af;
+        }
+        
+        .transaction-table td {
+            padding: 10px 8px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .transaction-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .transaction-table tr:hover {
+            background-color: #dbeafe;
+        }
+        
+        .amount-col {
+            text-align: right !important;
+            font-weight: bold;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .nav-col {
+            text-align: right !important;
+            font-family: 'Consolas', monospace;
+            color: #1e40af;
+        }
+        
+        .units-col {
+            text-align: right !important;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .purchase {
+            color: #059669;
+        }
+        
+        .redemption {
+            color: #dc2626;
+        }
+        
+        .portfolio-summary {
+            margin: 40px 0;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #059669;
+            border-radius: 12px;
+            padding: 25px;
+        }
+        
+        .portfolio-summary h3 {
+            color: #065f46;
+            margin: 0 0 20px 0;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .portfolio-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #059669;
+        }
+        
+        .portfolio-item h4 {
+            margin: 0 0 10px 0;
+            color: #065f46;
+            font-size: 12px;
+        }
+        
+        .portfolio-item .value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .tax-info {
+            margin: 30px 0;
+            background-color: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tax-info h4 {
+            color: #92400e;
+            margin: 0 0 15px 0;
+        }
+        
+        .tax-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        
+        .tax-table th,
+        .tax-table td {
+            padding: 10px;
+            border: 1px solid #fed7aa;
+            text-align: left;
+        }
+        
+        .tax-table th {
+            background-color: #fef3c7;
+            color: #92400e;
+            font-weight: bold;
+        }
+        
+        .disclaimer {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #fef2f2;
+            border-left: 5px solid #ef4444;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .disclaimer h4 {
+            color: #b91c1c;
+            margin-top: 0;
+        }
+        
+        .disclaimer ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        .disclaimer li {
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .footer .amc-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #60a5fa;
+        }
+        
+        .contact-details {
+            font-size: 10px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="amc-logo">{{amc_name}}</div>
+        <div class="amc-subtitle">Asset Management Company Limited</div>
+        <div class="document-title">CONSOLIDATED ACCOUNT STATEMENT (CAS)</div>
+    </div>
+
+    <div class="statement-info">
+        <div class="info-section">
+            <h4>Investor Details</h4>
+            <div class="info-item">
+                <span class="info-label">Investor Name:</span>
+                <span class="info-value">{{investor_name}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">PAN:</span>
+                <span class="info-value">{{pan_number}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Address:</span>
+                <span class="info-value">{{address}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Mobile:</span>
+                <span class="info-value">{{mobile_number}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{email_id}}</span>
+            </div>
+        </div>
+        <div class="info-section">
+            <h4>Statement Information</h4>
+            <div class="info-item">
+                <span class="info-label">Statement Period:</span>
+                <span class="info-value">{{start_date}} to {{end_date}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Statement Date:</span>
+                <span class="info-value">{{statement_date}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Folio Numbers:</span>
+                <span class="info-value folio-highlight">{{folio_numbers}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Advisor:</span>
+                <span class="info-value">{{advisor_name}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Distributor:</span>
+                <span class="info-value">{{distributor_name}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="portfolio-summary">
+        <h3>Portfolio Summary</h3>
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <h4>Total Investment</h4>
+                <div class="value">₹ {{total_investment}}</div>
+            </div>
+            <div class="portfolio-item">
+                <h4>Current Value</h4>
+                <div class="value">₹ {{current_value}}</div>
+            </div>
+            <div class="portfolio-item">
+                <h4>Total Gain/Loss</h4>
+                <div class="value {{gain_loss_class}}">₹ {{total_gain_loss}}</div>
+            </div>
+            <div class="portfolio-item">
+                <h4>Absolute Return</h4>
+                <div class="value {{return_class}}">{{absolute_return}}%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="schemes-section">
+        {% for scheme in schemes %}
+        <div class="scheme-card">
+            <div class="scheme-header">
+                <div class="scheme-name">{{scheme.name}}</div>
+                <div class="scheme-details">
+                    {{scheme.plan_type}} Plan | {{scheme.option_type}} Option | 
+                    Folio: {{scheme.folio_number}} | ISIN: {{scheme.isin}}
+                </div>
+            </div>
+            
+            <div class="scheme-summary">
+                <div class="summary-item">
+                    <h5>Units Held</h5>
+                    <div class="value">{{scheme.units_held}}</div>
+                </div>
+                <div class="summary-item">
+                    <h5>Current NAV</h5>
+                    <div class="value">₹ {{scheme.current_nav}}</div>
+                </div>
+                <div class="summary-item">
+                    <h5>Invested Amount</h5>
+                    <div class="value">₹ {{scheme.invested_amount}}</div>
+                </div>
+                <div class="summary-item">
+                    <h5>Current Value</h5>
+                    <div class="value">₹ {{scheme.current_value}}</div>
+                </div>
+                <div class="summary-item">
+                    <h5>Gain/Loss</h5>
+                    <div class="value {{scheme.gain_loss_class}}">₹ {{scheme.gain_loss}}</div>
+                </div>
+            </div>
+
+            {% if scheme.transactions %}
+            <div class="transaction-section">
+                <div class="transaction-header">
+                    Recent Transactions - {{scheme.name}}
+                </div>
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">Date</th>
+                            <th style="width: 15%;">Transaction</th>
+                            <th style="width: 12%;">Amount (₹)</th>
+                            <th style="width: 10%;">NAV (₹)</th>
+                            <th style="width: 12%;">Units</th>
+                            <th style="width: 10%;">Load (%)</th>
+                            <th style="width: 12%;">STT (₹)</th>
+                            <th style="width: 10%;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in scheme.transactions %}
+                        <tr>
+                            <td>{{transaction.date}}</td>
+                            <td class="{{transaction.type_class}}">{{transaction.type}}</td>
+                            <td class="amount-col">{{transaction.amount}}</td>
+                            <td class="nav-col">{{transaction.nav}}</td>
+                            <td class="units-col">{{transaction.units}}</td>
+                            <td class="amount-col">{{transaction.load}}</td>
+                            <td class="amount-col">{{transaction.stt}}</td>
+                            <td style="text-align: center;">{{transaction.status}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="tax-info">
+        <h4>Tax Information Summary</h4>
+        <table class="tax-table">
+            <thead>
+                <tr>
+                    <th>Financial Year</th>
+                    <th>Dividend Received (₹)</th>
+                    <th>TDS on Dividend (₹)</th>
+                    <th>Capital Gains Realized (₹)</th>
+                    <th>Securities Transaction Tax (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{current_financial_year}}</td>
+                    <td>{{dividend_received}}</td>
+                    <td>{{tds_on_dividend}}</td>
+                    <td>{{capital_gains_realized}}</td>
+                    <td>{{total_stt_paid}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="disclaimer">
+        <h4>Statutory Disclaimers & Important Information</h4>
+        <ul>
+            <li><strong>MUTUAL FUND INVESTMENTS ARE SUBJECT TO MARKET RISKS, READ ALL SCHEME RELATED DOCUMENTS CAREFULLY.</strong></li>
+            <li>This Consolidated Account Statement (CAS) is issued in compliance with SEBI regulations.</li>
+            <li>Past performance is not indicative of future returns.</li>
+            <li>The NAV and scheme performance data is as per the records of the Mutual Fund.</li>
+            <li>Please verify all details in this statement and report any discrepancies immediately.</li>
+            <li>For dividend paying schemes, dividend distribution is subject to availability of distributable surplus.</li>
+            <li>Tax implications may vary for different investors based on their tax status and applicable laws.</li>
+            <li>The investor is advised to consult their tax advisor for specific tax implications.</li>
+            <li>All investments are subject to statutory and regulatory guidelines.</li>
+            <li>The AMC reserves the right to modify scheme features subject to regulatory approval.</li>
+            <li>For latest NAV, scheme performance, and other details, visit {{website}} or call {{customer_care}}.</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <div class="amc-name">{{amc_name}}</div>
+        <div class="contact-details">
+            Customer Service: {{customer_care}} | Website: {{website}}<br>
+            {{registered_office}}<br>
+            CIN: {{cin_number}} | SEBI Registration No: {{sebi_registration}}<br>
+            Statement Date: {{statement_date}} | Generated: {{generation_date}}
+        </div>
+    </div>
+</body>
+</html>

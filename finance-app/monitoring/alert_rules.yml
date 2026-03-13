@@ -1,0 +1,152 @@
+# Prometheus alerting rules for finance app
+groups:
+  - name: finance-app.rules
+    rules:
+      # Application availability
+      - alert: FinanceAppDown
+        expr: up{job="finance-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Finance App is down"
+          description: "Finance App has been down for more than 1 minute"
+
+      # High error rate
+      - alert: HighErrorRate
+        expr: rate(finance_app_http_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }} requests per second"
+
+      # High response time
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(finance_app_http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time"
+          description: "95th percentile response time is {{ $value }} seconds"
+
+      # High memory usage
+      - alert: HighMemoryUsage
+        expr: (finance_app_process_resident_memory_bytes / finance_app_process_heap_total_bytes) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }}"
+
+      # Database connection issues
+      - alert: DatabaseConnectionError
+        expr: finance_app_database_errors_total > 10
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database connection errors"
+          description: "{{ $value }} database connection errors in the last minute"
+
+      # Redis unavailable
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis is down"
+          description: "Redis cache is unavailable"
+
+      # High cache miss rate
+      - alert: HighCacheMissRate
+        expr: rate(finance_app_cache_operations_total{result="miss"}[5m]) / rate(finance_app_cache_operations_total[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High cache miss rate"
+          description: "Cache miss rate is {{ $value | humanizePercentage }}"
+
+      # SSL certificate expiry
+      - alert: SSLCertificateExpiringSoon
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 30
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate expiring soon"
+          description: "SSL certificate expires in {{ $value | humanizeDuration }}"
+
+      # Disk space
+      - alert: LowDiskSpace
+        expr: (node_filesystem_free_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Low disk space"
+          description: "Disk usage is above 90%"
+
+      # Transaction processing issues
+      - alert: TransactionProcessingSlowing
+        expr: rate(finance_app_background_job_duration_seconds_sum{job_type="transaction_processing"}[5m]) / rate(finance_app_background_job_duration_seconds_count{job_type="transaction_processing"}[5m]) > 60
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Transaction processing is slow"
+          description: "Average transaction processing time is {{ $value }} seconds"
+
+      # Security alerts
+      - alert: SuspiciousLoginAttempts
+        expr: rate(finance_app_auth_attempts_total{result="failure"}[5m]) > 5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of failed login attempts"
+          description: "{{ $value }} failed login attempts per second"
+
+      - alert: RateLimitExceeded
+        expr: rate(finance_app_security_events_total{event_type="rate_limit_exceeded"}[5m]) > 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Rate limits being exceeded"
+          description: "{{ $value }} rate limit violations per second"
+
+  - name: system.rules
+    rules:
+      # System-level alerts
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value }}%"
+
+      - alert: HighLoadAverage
+        expr: node_load1 > 4
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High load average"
+          description: "1-minute load average is {{ $value }}"
+
+      - alert: OutOfMemory
+        expr: (node_memory_MemFree_bytes + node_memory_Cached_bytes + node_memory_Buffers_bytes) / node_memory_MemTotal_bytes < 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Out of memory"
+          description: "Available memory is {{ $value | humanizePercentage }}"

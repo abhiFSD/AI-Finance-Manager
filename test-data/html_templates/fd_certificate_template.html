@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Deposit Certificate</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            padding: 20px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        
+        .certificate-border {
+            border: 3px double #1f2937;
+            padding: 25px;
+            margin: 10px;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #1f2937;
+        }
+        
+        .bank-logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .certificate-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin: 20px 0;
+            text-decoration: underline;
+        }
+        
+        .fd-details {
+            background: white;
+            border: 2px solid #1f2937;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px dotted #6b7280;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #374151;
+        }
+        
+        .detail-value {
+            color: #1f2937;
+            font-weight: bold;
+        }
+        
+        .amount-highlight {
+            font-size: 18px;
+            color: #059669;
+            background-color: #ecfdf5;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .terms-conditions {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fef7cd;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+        }
+        
+        .signature-section {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .signature-box {
+            text-align: center;
+            width: 200px;
+        }
+        
+        .signature-line {
+            border-bottom: 2px solid #1f2937;
+            margin-bottom: 10px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate-border">
+        <div class="header">
+            <div class="bank-logo">{{bank_name}}</div>
+            <div style="font-size: 14px; color: #6b7280;">{{bank_tagline}}</div>
+            <div class="certificate-title">FIXED DEPOSIT CERTIFICATE</div>
+            <div style="font-size: 14px; font-weight: bold;">Certificate No: {{certificate_number}}</div>
+        </div>
+
+        <div class="fd-details">
+            <div class="detail-row">
+                <span class="detail-label">Depositor Name:</span>
+                <span class="detail-value">{{depositor_name}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">FD Receipt Number:</span>
+                <span class="detail-value">{{fd_receipt_number}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Principal Amount:</span>
+                <span class="detail-value amount-highlight">₹ {{principal_amount}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Date of Deposit:</span>
+                <span class="detail-value">{{deposit_date}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Maturity Date:</span>
+                <span class="detail-value">{{maturity_date}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Tenure:</span>
+                <span class="detail-value">{{tenure}} months</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Interest Rate:</span>
+                <span class="detail-value">{{interest_rate}}% per annum</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Maturity Amount:</span>
+                <span class="detail-value amount-highlight">₹ {{maturity_amount}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Nominee:</span>
+                <span class="detail-value">{{nominee_name}}</span>
+            </div>
+        </div>
+
+        <div class="terms-conditions">
+            <h4 style="color: #92400e; margin-top: 0;">Terms and Conditions:</h4>
+            <ul style="font-size: 11px;">
+                <li>This Fixed Deposit is governed by the rules and regulations of {{bank_name}}.</li>
+                <li>Premature withdrawal is subject to penalty charges as per bank's policy.</li>
+                <li>Interest is compounded quarterly and payable at maturity.</li>
+                <li>The deposit will be automatically renewed for the same period at prevailing rates if not claimed within 15 days of maturity.</li>
+                <li>This certificate must be surrendered at the time of payment.</li>
+            </ul>
+        </div>
+
+        <div class="signature-section">
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <div style="font-weight: bold;">Authorized Signatory</div>
+                <div style="font-size: 10px;">{{bank_name}}</div>
+            </div>
+            <div style="text-align: right; margin-top: 20px;">
+                <div style="font-weight: bold;">Date: {{issue_date}}</div>
+                <div style="font-size: 10px; margin-top: 10px;">Place: {{branch_location}}</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; font-size: 10px; color: #6b7280;">
+            This is a computer generated certificate and does not require signature
+        </div>
+    </div>
+</body>
+</html>

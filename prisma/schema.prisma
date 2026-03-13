@@ -1,0 +1,598 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts     Account[]
+  documents    Document[]
+  transactions Transaction[]
+  categories   Category[]
+  budgets      Budget[]
+  sessions     Session[]
+  goals        Goal[]
+  creditCards  CreditCard[]
+  investments  Investment[]
+  loans        Loan[]
+  riskProfile  RiskProfile?
+  insights     Insight[]
+  creditHealth CreditHealth[]
+  alerts       Alert[]
+  chatRooms    ChatRoom[]
+}
+
+// User roles
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// Session management
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// Financial accounts (bank accounts, credit cards, etc.)
+model Account {
+  id           String        @id @default(cuid())
+  userId       String
+  name         String
+  type         AccountType
+  institution  String
+  accountNumber String?
+  balance      Float         @default(0)
+  currency     String        @default("INR")
+  isActive     Boolean       @default(true)
+  lastSynced   DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@unique([userId, institution, accountNumber])
+  @@index([userId])
+  @@index([isActive])
+}
+
+// Account types
+enum AccountType {
+  CHECKING
+  SAVINGS
+  CREDIT_CARD
+  INVESTMENT
+  LOAN
+  WALLET
+}
+
+// Documents uploaded for processing
+model Document {
+  id           String         @id @default(cuid())
+  userId       String
+  fileName     String
+  fileUrl      String
+  fileSize     Int
+  mimeType     String
+  type         DocumentType
+  status       DocumentStatus @default(PENDING)
+  processedAt  DateTime?
+  extractedData Json?
+  errorMessage String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+// Document types
+enum DocumentType {
+  BANK_STATEMENT
+  CREDIT_CARD_STATEMENT
+  INVESTMENT_STATEMENT
+  LOAN_STATEMENT
+  RECEIPT
+  INVOICE
+  OTHER
+}
+
+// Document processing status
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+// Transactions
+model Transaction {
+  id           String          @id @default(cuid())
+  userId       String
+  accountId    String?
+  documentId   String?
+  date         DateTime
+  description  String
+  merchantName String?
+  amount       Float
+  type         TransactionType
+  categoryId   String?
+  tags         String        @default("")
+  isRecurring  Boolean         @default(false)
+  notes        String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account      Account?        @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  document     Document?       @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  category     Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([categoryId])
+  @@index([date])
+}
+
+// Transaction types
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+// Categories for transactions
+model Category {
+  id           String        @id @default(cuid())
+  userId       String?
+  name         String
+  icon         String?
+  color        String?
+  parentId     String?
+  isSystem     Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent       Category?     @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children     Category[]    @relation("CategoryHierarchy")
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@index([userId])
+  @@index([parentId])
+}
+
+// Budgets
+model Budget {
+  id           String        @id @default(cuid())
+  userId       String
+  categoryId   String
+  amount       Float
+  period       BudgetPeriod
+  startDate    DateTime
+  endDate      DateTime?
+  alertEnabled Boolean       @default(true)
+  alertThreshold Int         @default(80)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([categoryId])
+}
+
+// Budget periods
+enum BudgetPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  CUSTOM
+}
+
+// Goals for financial targets
+model Goal {
+  id            String        @id @default(cuid())
+  userId        String
+  name          String
+  targetAmount  Float
+  currentAmount Float         @default(0)
+  deadline      DateTime?
+  category      GoalCategory  @default(OTHER)
+  priority      GoalPriority  @default(MEDIUM)
+  description   String?
+  isCompleted   Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contributions GoalContribution[]
+  investments   Investment[]
+
+  @@index([userId])
+  @@index([isCompleted])
+  @@index([deadline])
+}
+
+// Goal categories
+enum GoalCategory {
+  EMERGENCY_FUND
+  VACATION
+  HOME_PURCHASE
+  CAR_PURCHASE
+  RETIREMENT
+  EDUCATION
+  DEBT_PAYOFF
+  INVESTMENT
+  OTHER
+}
+
+// Goal priorities
+enum GoalPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// Goal contributions tracking
+model GoalContribution {
+  id        String   @id @default(cuid())
+  goalId    String
+  amount    Float
+  date      DateTime @default(now())
+  notes     String?
+  createdAt DateTime @default(now())
+
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([goalId])
+  @@index([date])
+}
+
+// Credit Cards
+model CreditCard {
+  id             String          @id @default(cuid())
+  userId         String
+  name           String
+  lastFourDigits String
+  cardType       CreditCardType
+  issuer         String
+  creditLimit    Float
+  currentBalance Float           @default(0)
+  apr            Float           @default(0)
+  annualFee      Float           @default(0)
+  dueDate        DateTime?
+  minimumPayment Float           @default(0)
+  isActive       Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments       CreditCardPayment[]
+
+  @@index([userId])
+  @@index([isActive])
+  @@index([dueDate])
+}
+
+// Credit card types
+enum CreditCardType {
+  VISA
+  MASTERCARD
+  AMERICAN_EXPRESS
+  DISCOVER
+  RUPAY
+  DINERS_CLUB
+  OTHER
+}
+
+// Credit card payments tracking
+model CreditCardPayment {
+  id           String     @id @default(cuid())
+  creditCardId String
+  amount       Float
+  paymentDate  DateTime   @default(now())
+  paymentType  PaymentType @default(MANUAL)
+  notes        String?
+  createdAt    DateTime   @default(now())
+
+  creditCard   CreditCard @relation(fields: [creditCardId], references: [id], onDelete: Cascade)
+
+  @@index([creditCardId])
+  @@index([paymentDate])
+}
+
+// Payment types
+enum PaymentType {
+  MANUAL
+  AUTOMATIC
+  MINIMUM_PAYMENT
+  FULL_PAYMENT
+}
+
+// Investments
+model Investment {
+  id              String           @id @default(cuid())
+  userId          String
+  name            String
+  type            InvestmentType
+  platform        String?          // e.g., "Zerodha", "Groww"
+  currentValue    Float            @default(0)
+  investedAmount  Float            @default(0)
+  units           Float?           // for MFs, ETFs
+  purchaseDate    DateTime
+  lastUpdated     DateTime         @default(now())
+  expectedReturn  Float?           // annual % expected
+  goalId          String?          // linked to a financial goal
+  notes           String?
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal            Goal?            @relation(fields: [goalId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([type])
+  @@index([goalId])
+}
+
+// Investment types
+enum InvestmentType {
+  SIP
+  MUTUAL_FUND
+  ETF
+  FIXED_DEPOSIT
+  RECURRING_DEPOSIT
+  PPF
+  NPS
+  STOCKS
+  BONDS
+  GOLD
+  REAL_ESTATE
+  OTHER
+}
+
+// Loans
+model Loan {
+  id                  String       @id @default(cuid())
+  userId              String
+  name                String
+  type                LoanType
+  lender              String
+  principalAmount     Float
+  outstandingBalance  Float
+  interestRate        Float        // annual %
+  emiAmount           Float?
+  tenure              Int?         // months
+  startDate           DateTime
+  endDate             DateTime?
+  nextPaymentDate     DateTime?
+  isActive            Boolean      @default(true)
+  notes               String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  user                User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments            LoanPayment[]
+
+  @@index([userId])
+  @@index([type])
+  @@index([isActive])
+}
+
+// Loan payments
+model LoanPayment {
+  id          String   @id @default(cuid())
+  loanId      String
+  amount      Float
+  principal   Float?
+  interest    Float?
+  paymentDate DateTime @default(now())
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  loan        Loan     @relation(fields: [loanId], references: [id], onDelete: Cascade)
+
+  @@index([loanId])
+  @@index([paymentDate])
+}
+
+// Loan types
+enum LoanType {
+  HOME_LOAN
+  CAR_LOAN
+  PERSONAL_LOAN
+  EDUCATION_LOAN
+  CREDIT_CARD_DEBT
+  BUSINESS_LOAN
+  GOLD_LOAN
+  OTHER
+}
+
+// Risk profile for investment recommendations
+model RiskProfile {
+  id                String       @id @default(cuid())
+  userId            String       @unique
+  riskScore         Int          // 1-100
+  riskCategory      RiskCategory
+  investmentHorizon String?      // "short", "medium", "long"
+  monthlyIncome     Float?
+  monthlySavings    Float?
+  answers           String?      // JSON string of questionnaire answers
+  assessedAt        DateTime     @default(now())
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Risk categories
+enum RiskCategory {
+  CONSERVATIVE
+  MODERATE
+  BALANCED
+  GROWTH
+  AGGRESSIVE
+}
+
+// Insights and recommendations
+model Insight {
+  id          String          @id @default(cuid())
+  userId      String
+  type        InsightType
+  title       String
+  message     String
+  severity    InsightSeverity @default(INFO)
+  category    String?         // spending, saving, investment, debt
+  data        String?         // JSON string with supporting data
+  isRead      Boolean         @default(false)
+  isDismissed Boolean         @default(false)
+  validUntil  DateTime?
+  createdAt   DateTime        @default(now())
+
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+// Insight types
+enum InsightType {
+  SPENDING_ALERT
+  BUDGET_WARNING
+  SAVING_TIP
+  INVESTMENT_SUGGESTION
+  DEBT_ADVICE
+  GOAL_MILESTONE
+  ANOMALY_DETECTION
+  MONTHLY_SUMMARY
+}
+
+// Insight severity levels
+enum InsightSeverity {
+  INFO
+  WARNING
+  CRITICAL
+  SUCCESS
+}
+
+// Credit health tracking
+model CreditHealth {
+  id                String   @id @default(cuid())
+  userId            String
+  creditScore       Int?     // manually entered, 300-900
+  creditUtilization Float?   // percentage
+  totalCreditLimit  Float?
+  totalCreditUsed   Float?
+  onTimePayments    Int?     // count
+  missedPayments    Int?     // count
+  oldestAccountAge  Int?     // months
+  reportDate        DateTime @default(now())
+  source            String?  // "CIBIL", "Experian", etc.
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([reportDate])
+}
+
+// Alerts and notifications
+model Alert {
+  id          String        @id @default(cuid())
+  userId      String
+  type        AlertType
+  title       String
+  message     String
+  isRead      Boolean       @default(false)
+  priority    AlertPriority @default(NORMAL)
+  actionUrl   String?
+  createdAt   DateTime      @default(now())
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+// Alert types
+enum AlertType {
+  BUDGET_EXCEEDED
+  BILL_DUE
+  GOAL_MILESTONE
+  UNUSUAL_SPENDING
+  INVESTMENT_UPDATE
+  LOAN_PAYMENT_DUE
+  CREDIT_SCORE_CHANGE
+  SYSTEM
+}
+
+// Alert priority levels
+enum AlertPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+// Chat Rooms
+model ChatRoom {
+  id          String        @id @default(cuid())
+  userId      String
+  title       String        @default("New Chat")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  isArchived  Boolean       @default(false)
+  messages    ChatMessage[]
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, updatedAt])
+}
+
+// Chat Messages
+model ChatMessage {
+  id          String   @id @default(cuid())
+  roomId      String
+  role        String   // 'user' | 'assistant'
+  content     String
+  toolsCalled String?  // JSON stringified array of tool names
+  tokenUsage  String?  // JSON stringified {input, output}
+  createdAt   DateTime @default(now())
+  room        ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, createdAt])
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Test</title>
+</head>
+<body>
+    <h1>Registration Test</h1>
+    <form id="registerForm">
+        <input type="email" id="email" placeholder="Email" value="test3@example.com" required><br>
+        <input type="password" id="password" placeholder="Password" value="Test1234" required><br>
+        <input type="text" id="firstName" placeholder="First Name" value="John" required><br>
+        <input type="text" id="lastName" placeholder="Last Name" value="Doe" required><br>
+        <button type="submit">Register</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value
+            };
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h3>Response:</h3>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3>Error:</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

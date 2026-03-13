@@ -1,0 +1,293 @@
+{
+  "test_scenarios": {
+    "normal_transactions": [
+      {
+        "transaction_id": "UPI123456789012",
+        "date": "15/02/2024",
+        "time": "14:30:25",
+        "description": "UPI-P2A-123456789-SWIGGY-amit123@paytm",
+        "transaction_type": "UPI",
+        "amount": 485.50,
+        "is_credit": false,
+        "balance": 45234.50,
+        "category": "Restaurants",
+        "merchant": "Swiggy",
+        "reference_number": "REF1234567890",
+        "upi_id": "amit123@paytm"
+      },
+      {
+        "transaction_id": "NEFT987654321",
+        "date": "14/02/2024",
+        "time": "09:15:42",
+        "description": "NEFT-IN-987654321-FROM RAJESH KUMAR",
+        "transaction_type": "NEFT",
+        "amount": 25000.00,
+        "is_credit": true,
+        "balance": 44749.00,
+        "category": "Transfer",
+        "merchant": null,
+        "reference_number": "REF9876543210",
+        "upi_id": null
+      },
+      {
+        "transaction_id": "ATM5678901",
+        "date": "13/02/2024",
+        "time": "18:45:12",
+        "description": "ATM WDL-5678901-Mumbai",
+        "transaction_type": "ATM",
+        "amount": 3000.00,
+        "is_credit": false,
+        "balance": 19749.00,
+        "category": "Cash Withdrawal",
+        "merchant": "ATM",
+        "reference_number": "REF5678901234",
+        "upi_id": null
+      }
+    ],
+    "edge_cases": {
+      "negative_balance": {
+        "transaction_id": "OD123456789",
+        "date": "16/02/2024",
+        "time": "16:20:18",
+        "description": "EMI-HDFC HOME LOAN",
+        "transaction_type": "EMI",
+        "amount": 55000.00,
+        "is_credit": false,
+        "balance": -2500.50,
+        "category": "Loan",
+        "merchant": "HDFC Bank",
+        "reference_number": "REF1122334455",
+        "upi_id": null
+      },
+      "large_transaction": {
+        "transaction_id": "NEFT445566778",
+        "date": "12/02/2024",
+        "time": "11:30:00",
+        "description": "NEFT-IN-445566778-FROM SALARY ACCOUNT",
+        "transaction_type": "SALARY_CREDIT",
+        "amount": 125000.00,
+        "is_credit": true,
+        "balance": 132500.50,
+        "category": "Salary",
+        "merchant": null,
+        "reference_number": "REF4455667788",
+        "upi_id": null
+      },
+      "refund_transaction": {
+        "transaction_id": "REF789012345",
+        "date": "11/02/2024",
+        "time": "13:45:30",
+        "description": "REFUND-AMAZON ORDER CANCELLATION",
+        "transaction_type": "REFUND",
+        "amount": 2999.99,
+        "is_credit": true,
+        "balance": 7500.50,
+        "category": "Refund",
+        "merchant": "Amazon",
+        "reference_number": "REF7890123456",
+        "upi_id": null
+      },
+      "micro_transaction": {
+        "transaction_id": "UPI000111222",
+        "date": "10/02/2024",
+        "time": "08:15:45",
+        "description": "UPI-P2P-000111222-TEA-priya456@googlepay",
+        "transaction_type": "UPI",
+        "amount": 5.00,
+        "is_credit": false,
+        "balance": 4500.51,
+        "category": "Food & Beverages",
+        "merchant": "Local Tea Stall",
+        "reference_number": "REF0001112223",
+        "upi_id": "priya456@googlepay"
+      }
+    },
+    "transaction_types": {
+      "upi_transactions": [
+        {
+          "transaction_id": "UPI111111111111",
+          "date": "20/02/2024",
+          "time": "12:30:15",
+          "description": "UPI-P2M-111111111111-BIGBASKET-rohan789@phonepe",
+          "transaction_type": "UPI",
+          "amount": 1850.75,
+          "is_credit": false,
+          "balance": 23149.25,
+          "category": "Groceries",
+          "merchant": "BigBasket",
+          "reference_number": "REF1111111111",
+          "upi_id": "rohan789@phonepe"
+        },
+        {
+          "transaction_id": "UPI222222222222",
+          "date": "19/02/2024",
+          "time": "19:45:30",
+          "description": "UPI-P2A-222222222222-OLA-kavya321@paytm",
+          "transaction_type": "UPI",
+          "amount": 245.00,
+          "is_credit": false,
+          "balance": 25000.00,
+          "category": "Transportation",
+          "merchant": "Ola",
+          "reference_number": "REF2222222222",
+          "upi_id": "kavya321@paytm"
+        }
+      ],
+      "card_transactions": [
+        {
+          "transaction_id": "POS334455667",
+          "date": "18/02/2024",
+          "time": "15:20:45",
+          "description": "POS-334455667-McDONALDS",
+          "transaction_type": "DEBIT_CARD",
+          "amount": 425.00,
+          "is_credit": false,
+          "balance": 24575.00,
+          "category": "Restaurants",
+          "merchant": "McDonald's",
+          "reference_number": "REF3344556677",
+          "upi_id": null
+        },
+        {
+          "transaction_id": "POS556677889",
+          "date": "17/02/2024",
+          "time": "10:15:20",
+          "description": "POS TXN-556677889-RELIANCE FRESH",
+          "transaction_type": "DEBIT_CARD",
+          "amount": 2150.50,
+          "is_credit": false,
+          "balance": 25000.00,
+          "category": "Groceries",
+          "merchant": "Reliance Fresh",
+          "reference_number": "REF5566778899",
+          "upi_id": null
+        }
+      ],
+      "bank_transfers": [
+        {
+          "transaction_id": "IMPS778899001",
+          "date": "16/02/2024",
+          "time": "22:30:15",
+          "description": "IMPS-OUT-778899001-TO-PRIYA SHARMA",
+          "transaction_type": "IMPS",
+          "amount": 5000.00,
+          "is_credit": false,
+          "balance": 27150.50,
+          "category": "Transfer",
+          "merchant": null,
+          "reference_number": "REF7788990011",
+          "upi_id": null
+        },
+        {
+          "transaction_id": "NEFT990011223",
+          "date": "15/02/2024",
+          "time": "14:45:30",
+          "description": "NEFT-OUT-990011223-TO EDUCATION LOAN",
+          "transaction_type": "NEFT",
+          "amount": 15000.00,
+          "is_credit": false,
+          "balance": 32150.50,
+          "category": "Education",
+          "merchant": "SBI Education Loan",
+          "reference_number": "REF9900112233",
+          "upi_id": null
+        }
+      ]
+    },
+    "recurring_transactions": [
+      {
+        "transaction_id": "SIP001122334",
+        "date": "01/02/2024",
+        "time": "10:00:00",
+        "description": "SIP-HDFC EQUITY FUND",
+        "transaction_type": "EMI",
+        "amount": 10000.00,
+        "is_credit": false,
+        "balance": 47150.50,
+        "category": "Investment",
+        "merchant": "HDFC Mutual Fund",
+        "reference_number": "REF0011223344",
+        "upi_id": null,
+        "recurring": true,
+        "frequency": "monthly"
+      },
+      {
+        "transaction_id": "UTIL445566778",
+        "date": "05/02/2024",
+        "time": "09:15:30",
+        "description": "ELECTRICITY BILL-MUMBAI",
+        "transaction_type": "DEBIT_CARD",
+        "amount": 2850.00,
+        "is_credit": false,
+        "balance": 57150.50,
+        "category": "Utilities",
+        "merchant": "MSEB",
+        "reference_number": "REF4455667788",
+        "upi_id": null,
+        "recurring": true,
+        "frequency": "monthly"
+      }
+    ],
+    "international_transactions": [
+      {
+        "transaction_id": "INTL667788990",
+        "date": "08/02/2024",
+        "time": "16:30:45",
+        "description": "INTL TXN-NETFLIX SUBSCRIPTION-USD",
+        "transaction_type": "DEBIT_CARD",
+        "amount": 649.00,
+        "is_credit": false,
+        "balance": 60000.50,
+        "category": "Entertainment",
+        "merchant": "Netflix",
+        "reference_number": "REF6677889900",
+        "upi_id": null,
+        "currency": "USD",
+        "exchange_rate": 82.35,
+        "original_amount": 7.88
+      }
+    ]
+  },
+  "account_summary": {
+    "opening_balance": 50000.00,
+    "closing_balance": 23149.25,
+    "total_credits": 152999.99,
+    "total_debits": 179850.74,
+    "total_transactions": 15,
+    "avg_transaction_amount": 11988.31,
+    "largest_transaction": 125000.00,
+    "smallest_transaction": 5.00
+  },
+  "categories_summary": {
+    "Restaurants": {
+      "total_amount": 910.50,
+      "transaction_count": 2,
+      "avg_amount": 455.25
+    },
+    "Groceries": {
+      "total_amount": 4001.25,
+      "transaction_count": 2,
+      "avg_amount": 2000.63
+    },
+    "Transportation": {
+      "total_amount": 245.00,
+      "transaction_count": 1,
+      "avg_amount": 245.00
+    },
+    "Transfer": {
+      "total_amount": 20000.00,
+      "transaction_count": 2,
+      "avg_amount": 10000.00
+    },
+    "Investment": {
+      "total_amount": 10000.00,
+      "transaction_count": 1,
+      "avg_amount": 10000.00
+    },
+    "Utilities": {
+      "total_amount": 2850.00,
+      "transaction_count": 1,
+      "avg_amount": 2850.00
+    }
+  }
+}

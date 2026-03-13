@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBI Bank Statement</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            padding: 20px;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #003f7f;
+            padding-bottom: 15px;
+        }
+        
+        .bank-logo {
+            color: #003f7f;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .bank-tagline {
+            color: #003f7f;
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        .statement-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #003f7f;
+            text-decoration: underline;
+        }
+        
+        .customer-info {
+            margin: 25px 0;
+            background-color: #f0f8ff;
+            padding: 20px;
+            border: 2px solid #003f7f;
+        }
+        
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .info-left, .info-right {
+            width: 48%;
+        }
+        
+        .info-item {
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #003f7f;
+            display: inline-block;
+            width: 150px;
+        }
+        
+        .period-info {
+            text-align: center;
+            margin: 25px 0;
+            font-weight: bold;
+            background-color: #003f7f;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+        }
+        
+        .balance-summary {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background-color: #f9f9f9;
+        }
+        
+        .balance-summary th,
+        .balance-summary td {
+            border: 2px solid #003f7f;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .balance-summary th {
+            background-color: #003f7f;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .balance-summary td {
+            font-size: 16px;
+            color: #003f7f;
+        }
+        
+        .transaction-header {
+            background-color: #003f7f;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 25px;
+        }
+        
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        
+        .transaction-table th,
+        .transaction-table td {
+            border: 1px solid #003f7f;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .transaction-table th {
+            background-color: #e6f0ff;
+            color: #003f7f;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .amount-col {
+            text-align: right !important;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .credit-amount {
+            color: #006400;
+            font-weight: bold;
+        }
+        
+        .debit-amount {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        
+        .balance-col {
+            text-align: right !important;
+            font-weight: bold;
+            background-color: #f5f5f5;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .footer-notes {
+            margin-top: 40px;
+            padding: 20px;
+            border: 2px solid #003f7f;
+            background-color: #f0f8ff;
+            font-size: 11px;
+        }
+        
+        .footer-notes h4 {
+            color: #003f7f;
+            margin-top: 0;
+        }
+        
+        .footer-signature {
+            text-align: right;
+            margin-top: 30px;
+            color: #003f7f;
+            font-weight: bold;
+        }
+        
+        .bank-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid #003f7f;
+            font-size: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="bank-logo">STATE BANK OF INDIA</div>
+        <div class="bank-tagline">India's Largest Bank • Serving Since 1955</div>
+        <div class="statement-title">SAVINGS BANK ACCOUNT STATEMENT</div>
+    </div>
+
+    <div class="customer-info">
+        <div class="info-section">
+            <div class="info-left">
+                <div class="info-item">
+                    <span class="info-label">Account Holder Name:</span> {{account_holder_name}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Account Number:</span> {{account_number}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Account Type:</span> {{account_type}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">IFSC Code:</span> {{ifsc_code}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">MICR Code:</span> {{micr_code}}
+                </div>
+            </div>
+            <div class="info-right">
+                <div class="info-item">
+                    <span class="info-label">Branch Name:</span> {{branch_name}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Branch Code:</span> {{branch_code}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Customer ID:</span> {{customer_id}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Mobile Number:</span> {{mobile_number}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Email ID:</span> {{email_id}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="period-info">
+        STATEMENT FOR THE PERIOD: {{start_date}} TO {{end_date}}
+    </div>
+
+    <table class="balance-summary">
+        <thead>
+            <tr>
+                <th>Opening Balance</th>
+                <th>Total Credits</th>
+                <th>Total Debits</th>
+                <th>Closing Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>₹ {{opening_balance}}</td>
+                <td>₹ {{total_credits}}</td>
+                <td>₹ {{total_debits}}</td>
+                <td>₹ {{closing_balance}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="transaction-header">
+        TRANSACTION DETAILS
+    </div>
+
+    <table class="transaction-table">
+        <thead>
+            <tr>
+                <th style="width: 10%;">Txn Date</th>
+                <th style="width: 10%;">Value Date</th>
+                <th style="width: 35%;">Transaction Particulars</th>
+                <th style="width: 15%;">Reference No.</th>
+                <th style="width: 12%;">Debit Amount</th>
+                <th style="width: 12%;">Credit Amount</th>
+                <th style="width: 15%;">Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{transaction.date}}</td>
+                <td>{{transaction.date}}</td>
+                <td>{{transaction.description}}</td>
+                <td>{{transaction.reference_number}}</td>
+                <td class="amount-col">
+                    {% if not transaction.is_credit %}
+                    <span class="debit-amount">{{transaction.amount}}</span>
+                    {% endif %}
+                </td>
+                <td class="amount-col">
+                    {% if transaction.is_credit %}
+                    <span class="credit-amount">{{transaction.amount}}</span>
+                    {% endif %}
+                </td>
+                <td class="balance-col">{{transaction.balance}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer-notes">
+        <h4>IMPORTANT INFORMATION:</h4>
+        <ul>
+            <li>This statement is generated electronically and is valid without signature.</li>
+            <li>In case of any discrepancy, please contact the branch within 15 days from the date of statement.</li>
+            <li>Interest on Savings Bank Account is calculated on daily balance and credited quarterly.</li>
+            <li>Minimum balance requirement: Rs. 3,000/- for Metro/Urban branches, Rs. 2,000/- for Semi-Urban, Rs. 1,000/- for Rural.</li>
+            <li>For any queries, please call SBI Contact Centre: 1800-11-2211 (Toll Free) or 1800-425-3800.</li>
+            <li>Visit our website: www.sbi.co.in for online banking services.</li>
+        </ul>
+    </div>
+
+    <div class="footer-signature">
+        This is a system generated statement
+    </div>
+
+    <div class="bank-footer">
+        <p><strong>STATE BANK OF INDIA</strong></p>
+        <p>Customer Care: 1800-11-2211 | www.sbi.co.in</p>
+        <p>Statement Date: {{statement_date}} | Generated on: {{generation_date}}</p>
+    </div>
+</body>
+</html>
